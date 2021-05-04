@@ -28,9 +28,10 @@ function gethotelCheaper(typeClient, ...date){
     let valueTotal = 99999999;
     let nameHotel = "";
     let classificationHotel = 0;
-    let weekDays = ["mon", "tue", "wed", "thu", "fri"];
+    let weekDay = ["mon", "tue", "wed", "thu", "fri"];
+    let weekEnd = ["sat", "sun"];
     for(var numbemHotel = 0; numbemHotel < hotel.length; numbemHotel++){
-        let value = calcValeuTotal(date, weekDays, typeClient, numbemHotel);
+        let value = calcValueTotal(date, weekDay, weekEnd, typeClient, numbemHotel);
         if(value < valueTotal){
             valueTotal = value;
             nameHotel = hotel[numbemHotel].name;
@@ -46,25 +47,21 @@ function gethotelCheaper(typeClient, ...date){
     }
     return nameHotel;
 }
-function calcValeuTotal(date, weekDays, typeClient, numbemHotel){
+function calcValueTotal(date, weekDay, weekEnd, typeClient, numbemHotel){
     let value = 0;
     for(let i = 0; i < date.length; i++){
         let data = date[i].match(/\(.*\)/);
         data = data[0].replace("(", "");
         data = data.replace(")", "");
-        for(var k = 0; k < weekDays.length; k++){
-            if(data == weekDays[k]){
-                (typeClient == "Regular") ? value += hotel[numbemHotel].weekdayRegular: value += 0;
-                (typeClient == "Fidelidade") ? value += hotel[numbemHotel].weekdayFidelity: value += 0;
-            }
+        if(undefined != weekDay.find(day => day == data)){
+            (typeClient == "Regular") ? value += hotel[numbemHotel].weekdayRegular: value += 0;
+            (typeClient == "Fidelidade") ? value += hotel[numbemHotel].weekdayFidelity: value += 0;
         }
-        if(typeClient == "Regular"){
-            (data == "sat") ? value += hotel[numbemHotel].weekendRegular : value += 0;
-            (data == "sun") ? value += hotel[numbemHotel].weekendRegular : value += 0;
-        }else if (typeClient == "Fidelidade"){
-            (data == "sat") ? value += hotel[numbemHotel].weekendFidelity : value += 0;
-            (data == "sun") ? value += hotel[numbemHotel].weekendFidelity : value += 0;
+        if(undefined != weekEnd.find(day => day == data)){
+            (typeClient == "Regular") ? value += hotel[numbemHotel].weekendRegular: value += 0;
+            (typeClient == "Fidelidade") ? value += hotel[numbemHotel].weekendFidelity: value += 0;
         }
+        
     }
     return value;
 }
