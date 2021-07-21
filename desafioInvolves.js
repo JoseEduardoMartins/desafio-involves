@@ -48,8 +48,8 @@ function gethotelCheaper(typeClient, ...date){
 }
 function calcValueTotal(date, weekDay, weekEnd, typeClient, numberHotel){
     let value = 0;
-    for(let i = 0; i < date.length; i++){
-        let data = date[i].match(/\(.*\)/);
+    date.forEach((dayDate) => {
+        let data = dayDate.match(/\(.*\)/);
         data = data[0].replace("(", "");
         data = data.replace(")", "");
         if(weekDay.find(day => day == data)){
@@ -60,7 +60,7 @@ function calcValueTotal(date, weekDay, weekEnd, typeClient, numberHotel){
             (typeClient == "Regular") ? value += hotel[numberHotel].weekendRegular: value += 0;
             (typeClient == "Fidelidade") ? value += hotel[numberHotel].weekendFidelity: value += 0;
         }
-    }
+    });
     return value;
 }
 console.log(gethotelCheaper("Regular", "16Mar2020(mon)", "17Mar2020(tue)", "18Mar2020(wed)"));
